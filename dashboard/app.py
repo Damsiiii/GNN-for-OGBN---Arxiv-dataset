@@ -1,7 +1,15 @@
 
-import streamlit as st
-import pandas as pd
 import os
+from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+BASE_DIR = Path(os.environ.get("APP_RESULTS_DIR", PROJECT_ROOT / "results")).expanduser()
+if not BASE_DIR.is_absolute():
+    BASE_DIR = (PROJECT_ROOT / BASE_DIR).resolve()
+BASE_DIR = BASE_DIR.resolve()
 
 # -------------------------------------------------------
 # Page Configuration
@@ -82,11 +90,6 @@ The dashboard includes:
 """)
 
 st.markdown("---")
-
-# -------------------------------------------------------
-# Base results directory (change this if your project folder differs)
-# -------------------------------------------------------
-BASE_DIR = "/content/drive/MyDrive/CCS4354_Tensors_and_Graphs/results"
 
 # -------------------------------------------------------
 # Sidebar
@@ -242,11 +245,11 @@ The **OGBN-Arxiv** dataset is a citation network where:
 
         st.subheader("Sample Subgraph")
 
-        image_path = os.path.join(BASE_DIR, "graphs", "sample_subgraph.png")
+        image_path = BASE_DIR / "graphs" / "sample_subgraph.png"
 
-        if os.path.exists(image_path):
+        if image_path.exists():
             st.image(
-                image_path,
+                str(image_path),
                 caption="Sample Subgraph of the OGBN-Arxiv Citation Network",
                 use_container_width=True
             )
@@ -261,11 +264,11 @@ The **OGBN-Arxiv** dataset is a citation network where:
         st.subheader("Degree Distribution")
 
         # Histogram
-        image_path = os.path.join(BASE_DIR, "plots", "degree_distribution.png")
+        image_path = BASE_DIR / "plots" / "degree_distribution.png"
 
-        if os.path.exists(image_path):
+        if image_path.exists():
             st.image(
-                image_path,
+                str(image_path),
                 caption="Histogram",
                 use_container_width=True
             )
@@ -275,11 +278,11 @@ The **OGBN-Arxiv** dataset is a citation network where:
         st.markdown("#### Degree Rank Plot")
 
         # Degree Rank Plot
-        image_path = os.path.join(BASE_DIR, "plots", "degree_rank_distribution.png")
+        image_path = BASE_DIR / "plots" / "degree_rank_distribution.png"
 
-        if os.path.exists(image_path):
+        if image_path.exists():
             st.image(
-                image_path,
+                str(image_path),
                 caption="Degree Rank Plot",
                 use_container_width=True
             )
@@ -296,9 +299,9 @@ elif page == "Model Performance":
 
     st.subheader("Model Comparison")
 
-    eval_path = os.path.join(BASE_DIR, "evaluation", "model_comparison.csv")
+    eval_path = BASE_DIR / "evaluation" / "model_comparison.csv"
 
-    if os.path.exists(eval_path):
+    if eval_path.exists():
         df = pd.read_csv(eval_path)
         st.dataframe(df, use_container_width=True)
     else:
@@ -310,26 +313,26 @@ elif page == "Model Performance":
 
     with col1:
         st.subheader("Training Loss")
-        image_path = os.path.join(BASE_DIR, "plots", "training_loss_comparison.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "training_loss_comparison.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("training_loss_comparison.png not found.")
 
     with col2:
         st.subheader("Validation Accuracy")
-        image_path = os.path.join(BASE_DIR, "plots", "validation_accuracy_comparison.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "validation_accuracy_comparison.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("validation_accuracy_comparison.png not found.")
 
     st.markdown("---")
 
     st.subheader("Validation Macro-F1")
-    image_path = os.path.join(BASE_DIR, "plots", "validation_f1_comparison.png")
-    if os.path.exists(image_path):
-        st.image(image_path, use_container_width=True)
+    image_path = BASE_DIR / "plots" / "validation_f1_comparison.png"
+    if image_path.exists():
+        st.image(str(image_path), use_container_width=True)
     else:
         st.warning("validation_f1_comparison.png not found.")
 
@@ -356,17 +359,17 @@ Principal Component Analysis (PCA) and t-SNE.
 
     with col1:
         st.subheader("PCA Embedding (GCN)")
-        image_path = os.path.join(BASE_DIR, "plots", "gcn_embedding_pca.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "gcn_embedding_pca.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("gcn_embedding_pca.png not found.")
 
     with col2:
         st.subheader("t-SNE Embedding (GCN)")
-        image_path = os.path.join(BASE_DIR, "plots", "gcn_embedding_tsne.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "gcn_embedding_tsne.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("gcn_embedding_tsne.png not found.")
 
@@ -376,17 +379,17 @@ Principal Component Analysis (PCA) and t-SNE.
 
     with col3:
         st.subheader("PCA Embedding (GraphSAGE)")
-        image_path = os.path.join(BASE_DIR, "plots", "sage_embedding_pca.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "sage_embedding_pca.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("sage_embedding_pca.png not found.")
 
     with col4:
         st.subheader("t-SNE Embedding (GraphSAGE)")
-        image_path = os.path.join(BASE_DIR, "plots", "sage_embedding_tsne.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "sage_embedding_tsne.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("sage_embedding_tsne.png not found.")
 
@@ -403,10 +406,10 @@ The following figure shows the Top 10 important node features
 used by the Graph Neural Network.
 """)
 
-    image_path = os.path.join(BASE_DIR, "plots", "feature_importance_top10.png")
+    image_path = BASE_DIR / "plots" / "feature_importance_top10.png"
 
-    if os.path.exists(image_path):
-        st.image(image_path, use_container_width=True)
+    if image_path.exists():
+        st.image(str(image_path), use_container_width=True)
     else:
         st.warning("feature_importance_top10.png not found.")
 
@@ -432,16 +435,16 @@ DGI pretraining, GNNExplainer) and the Performance Optimization techniques
     # -----------------------------------------------
     st.subheader("Bonus Models Comparison (Test Set)")
 
-    csv_path = os.path.join(BASE_DIR, "evaluation", "bonus_model_comparison.csv")
-    if os.path.exists(csv_path):
+    csv_path = BASE_DIR / "evaluation" / "bonus_model_comparison.csv"
+    if csv_path.exists():
         df = pd.read_csv(csv_path)
         st.dataframe(df, use_container_width=True)
     else:
         st.warning("bonus_model_comparison.csv not found.")
 
-    image_path = os.path.join(BASE_DIR, "plots", "bonus_architecture_comparison.png")
-    if os.path.exists(image_path):
-        st.image(image_path, use_container_width=True)
+    image_path = BASE_DIR / "plots" / "bonus_architecture_comparison.png"
+    if image_path.exists():
+        st.image(str(image_path), use_container_width=True)
     else:
         st.warning("bonus_architecture_comparison.png not found.")
 
@@ -454,17 +457,17 @@ DGI pretraining, GNNExplainer) and the Performance Optimization techniques
 
     with col1:
         st.subheader("Self-Supervised (DGI) Pretraining Loss")
-        image_path = os.path.join(BASE_DIR, "plots", "dgi_pretraining_loss.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "dgi_pretraining_loss.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("dgi_pretraining_loss.png not found.")
 
     with col2:
         st.subheader("GNNExplainer - Edge Importance")
-        image_path = os.path.join(BASE_DIR, "plots", "gnnexplainer_node_explanation.png")
-        if os.path.exists(image_path):
-            st.image(image_path, use_container_width=True)
+        image_path = BASE_DIR / "plots" / "gnnexplainer_node_explanation.png"
+        if image_path.exists():
+            st.image(str(image_path), use_container_width=True)
         else:
             st.warning("gnnexplainer_node_explanation.png not found.")
 
@@ -475,24 +478,24 @@ DGI pretraining, GNNExplainer) and the Performance Optimization techniques
     # -----------------------------------------------
     st.subheader("Performance Optimization - Every Model (Test Set)")
 
-    csv_path = os.path.join(BASE_DIR, "evaluation", "performance_optimization_comparison.csv")
-    if os.path.exists(csv_path):
+    csv_path = BASE_DIR / "evaluation" / "performance_optimization_comparison.csv"
+    if csv_path.exists():
         df = pd.read_csv(csv_path)
         st.dataframe(df, use_container_width=True)
     else:
         st.warning("performance_optimization_comparison.csv not found.")
 
-    image_path = os.path.join(BASE_DIR, "plots", "performance_optimization_comparison.png")
-    if os.path.exists(image_path):
-        st.image(image_path, use_container_width=True)
+    image_path = BASE_DIR / "plots" / "performance_optimization_comparison.png"
+    if image_path.exists():
+        st.image(str(image_path), use_container_width=True)
     else:
         st.warning("performance_optimization_comparison.png not found.")
 
     st.markdown("---")
 
     st.subheader("Weighted Ensemble - Model Weights")
-    csv_path = os.path.join(BASE_DIR, "evaluation", "ensemble_weights.csv")
-    if os.path.exists(csv_path):
+    csv_path = BASE_DIR / "evaluation" / "ensemble_weights.csv"
+    if csv_path.exists():
         df = pd.read_csv(csv_path)
         st.dataframe(df, use_container_width=True)
     else:
